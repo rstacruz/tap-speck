@@ -20,5 +20,9 @@
   },
   "bin": {
     "tap-speck": "bin/tap-speck"
-  }
+  },
+  "files": [
+    "index.js",
+    "bin"
+  ]
 }
