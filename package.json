@@ -15,6 +15,7 @@
     "chalk": "1.1.1",
     "duplexer": "0.1.1",
     "figures": "1.4.0",
+    "js-yaml": "3.5.2",
     "tap-out": "1.4.1"
   },
   "bin": {

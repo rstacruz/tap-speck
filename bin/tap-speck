@@ -8,8 +8,10 @@ if ((process.argv.indexOf('--min') > -1) ||
   options.min = true
 }
 
+var stream = tapSpec(options)
+
 process.stdin
-  .pipe(tapSpec(options))
+  .pipe(stream)
   .pipe(process.stdout)
 
 process.on('exit', function (status) {
@@ -17,7 +19,7 @@ process.on('exit', function (status) {
     process.exit(1)
   }
 
-  if (tapSpec.failed) {
+  if (stream.failed) {
     process.exit(1)
   }
 })

@@ -3,6 +3,7 @@ var tapout = require('tap-out')
 var duplexer = require('duplexer')
 var symbols = require('figures')
 var chalk = require('chalk')
+var yaml = require('js-yaml')
 
 var s = {
   err: chalk.red,
@@ -26,7 +27,7 @@ function tapSpec (options) {
   }
 
   tap.on('fail', function (t) {
-    tapSpec.failed = true
+    stream.failed = true
   })
 
   tap.on('comment', function (t) {
@@ -45,11 +46,11 @@ function tapSpec (options) {
 
   tap.on('output', function (results) {
     if (results.plans.length < 1) {
-      tapSpec.failed = true
+      stream.failed = true
     }
 
     if (results.fail.length > 0) {
-      tapSpec.failed = true
+      stream.failed = true
     }
 
     if (!options.min) out.push('\n')
@@ -79,21 +80,25 @@ function tapSpec (options) {
   return stream
 }
 
-function formatErr (err) {
+function formatErr (error) {
+  var err = yaml.safeLoad(error.raw)
+
   var out = ''
   out += '    ' +
-    s.trace(relative(err.at.file) +
-    ':' + err.at.line +
-    ':' + err.at.character + ':')
+    s.trace(relative(error.at.file) +
+    ':' + error.at.line +
+    ':' + error.at.character + ':')
 
   if (err.operator === 'equal' || err.operator === 'deepEqual') {
-    out += ' expected ' + err.actual + ' == ' + err.expected + '\n'
+    out += ' equal\n'
+    out += '    ' + s.err('- ') + err.expected.replace(/\n/g, '\n      ') + '\n'
+    out += '    ' + s.ok('+ ') + err.actual.replace(/\n/g, '\n      ') + '\n'
   } else if (err.operator !== 'count') {
     out += ' t.' + err.operator + '()\n'
   }
-  if (err.stack) {
+  if (error.stack) {
     // TODO: clean stack trace
-    out += '    ' + s.trace(err.stack.replace(/\n/g, '\n      '))
+    out += '    ' + s.trace(error.stack.replace(/\n/g, '\n      '))
   }
 
   return out
