@@ -62,23 +62,24 @@ function tapSpec (options) {
       }
 
       results.fail.forEach(function (t) {
-        try {
         out.push('\n  ' + s.err(symbols.cross) + ' ' + s.err(t.name) + '\n')
         out.push(formatErr(t.error))
-        } catch (e) {
-          console.log(e)
-        }
       })
 
       out.push('\n')
 
+      if (!options.min) {
+        out.push('  ' + s.err(Array(process.stdout.columns - 3).join(symbols.line)) + '\n')
+      }
+
       out.push('  ' +
-        s.err(symbols.warning) + ' ' +
-        s.err(results.fail.length + ' failed') + '\n  ' +
-        s.mute('  ' + results.pass.length + ' passed') +
+        s.err(symbols.cross) + ' ' +
+        s.err(results.fail.length + ' failed') + ' ' +
+        s.mute(results.pass.length + ' passed') +
         '\n')
     } else {
-      out.push('  ' + s.ok(results.pass.length + ' passed') + '\n')
+      if (options.min) out.push('\n')
+      out.push('  ' + s.ok(results.pass.length + ' passed '+ symbols.tick) + '\n')
     }
   })
 
