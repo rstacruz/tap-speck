@@ -7,5 +7,17 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "through2": "2.0.1"
+  },
+  "dependencies": {
+    "chalk": "1.1.1",
+    "duplexer": "0.1.1",
+    "figures": "1.4.0",
+    "tap-out": "1.4.1"
+  },
+  "bin": {
+    "tap-speck": "bin/tap-speck"
+  }
 }
