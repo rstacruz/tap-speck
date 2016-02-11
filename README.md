@@ -2,7 +2,7 @@
 
 > Readable tap output
 
-![](docs/images/screenshots.png)
+![](docs/images/screenshots-0_2_0.png)
 
 ## Usage
 
