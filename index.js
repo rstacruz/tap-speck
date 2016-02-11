@@ -89,12 +89,16 @@ function formatErr (error) {
     ':' + error.at.line +
     ':' + error.at.character + ':')
 
-  if (err.operator === 'equal' || err.operator === 'deepEqual') {
-    out += ' equal\n'
+  if ((~['equal', 'deepEqual', 'deepLooseEqual'].indexOf(err.operator)) ||
+    (err.operator === 'throws' && err.expected)) {
+    out += ' ' + s.trace(err.operator) + '\n'
     out += '    ' + s.err('- ') + err.expected.replace(/\n/g, '\n      ') + '\n'
     out += '    ' + s.ok('+ ') + err.actual.replace(/\n/g, '\n      ') + '\n'
-  } else if (err.operator !== 'count') {
-    out += ' t.' + err.operator + '()\n'
+  } else if (~['notEqual', 'notDeepEqual', 'notDeepLooseEqual'].indexOf(err.operator)) {
+    out += ' ' + s.trace(err.operator) + '\n'
+    out += '    ' + s.ok('> ') + err.actual.replace(/\n/g, '\n      ') + '\n'
+  } else {
+    out += ' ' + s.trace(err.operator) + '\n'
   }
   if (error.stack) {
     // TODO: clean stack trace
