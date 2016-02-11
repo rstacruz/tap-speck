@@ -20,14 +20,20 @@ function tapSpec (options) {
   var out = through()
   var tap = tapout()
   var stream = duplexer(tap, out)
+  var failures = []
+  var lastTest
 
   if (!options.min) {
     tap.on('test', function (t) {
       out.push('\n' + '  ' + s.heading(t.name) + '\n')
     })
   }
+  tap.on('test', function (t) {
+    lastTest = t
+  })
 
   tap.on('fail', function (t) {
+    failures.push({ test: lastTest, assertion: t })
     stream.failed = true
   })
 
@@ -57,11 +63,15 @@ function tapSpec (options) {
 
     out.push('\n')
 
-    if (results.fail.length > 0) {
+    if (failures.length > 0) {
       out.push('  ' + chalk.bold('Failures:') + '\n')
 
-      results.fail.forEach(function (t) {
-        out.push('\n  ' + s.err(symbols.cross) + ' ' + s.err(t.name) + '\n')
+      failures.forEach(function (fail) {
+        var test = fail.test
+        var t = fail.assertion
+        out.push('\n  ' + s.err(symbols.cross) + ' ' +
+          s.err(test.name) + ' ' + s.mute(symbols.arrowRight) + ' ' +
+          s.err(t.name) + '\n')
         try {
           out.push(formatErr(t.error))
         } catch (e) {
