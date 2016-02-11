@@ -1,14 +1,26 @@
 #!/usr/bin/env node
+var cli = require('meow')([
+  'Usage:',
+  '  ... | tap-speck',
+  '',
+  'Options:',
+  '  -m, --min        minimal mode',
+  '      --no-color   boring mode',
+  '',
+  'Other options:',
+  '  -h, --help       show usage information',
+  '  -v, --version    print version info and exit'
+].join('\n'), {
+  boolean: ['help', 'version', 'min'],
+  alias: {
+    h: 'help', v: 'version', m: 'min'
+  }
+})
 
 var tapSpec = require('../')
 var options = {}
 
-if ((process.argv.indexOf('--min') > -1) ||
-  (process.argv.indexOf('-m') > -1)) {
-  options.min = true
-}
-
-var stream = tapSpec(options)
+var stream = tapSpec(cli.flags)
 
 process.stdin
   .pipe(stream)
