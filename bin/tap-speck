@@ -5,33 +5,34 @@ var cli = require('meow')([
   '',
   'Options:',
   '  -m, --min        minimal mode',
-  '      --no-color   boring mode',
+  '      --passthru   allow chaining tap reporters',
+  '      --no-color   boring mode (or --color to force color)',
   '',
   'Other options:',
   '  -h, --help       show usage information',
   '  -v, --version    print version info and exit'
 ].join('\n'), {
-  boolean: ['help', 'version', 'min'],
+  boolean: ['help', 'version', 'min', 'passthru'],
   alias: {
     h: 'help', v: 'version', m: 'min'
   }
 })
 
 var tapSpec = require('../')
-var options = {}
-
 var stream = tapSpec(cli.flags)
 
-process.stdin
-  .pipe(stream)
-  .pipe(process.stdout)
+if (cli.flags.passthru) {
+  process.stdin
+    .pipe(process.stdout)
+  process.stdin
+    .pipe(stream)
+    .pipe(process.stderr)
+} else {
+  process.stdin
+    .pipe(stream)
+    .pipe(process.stdout)
+}
 
 process.on('exit', function (status) {
-  if (status === 1) {
-    process.exit(1)
-  }
-
-  if (stream.failed) {
-    process.exit(1)
-  }
+  if (status === 1 || stream.failed) process.exit(1)
 })

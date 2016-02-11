@@ -58,7 +58,7 @@ function tapSpec (options) {
 
     if (results.fail.length > 0) {
       if (!options.min) {
-        out.push('  ' + s.err(Array(process.stdout.columns - 3).join(symbols.line)) + '\n')
+        out.push('  ' + s.err(Array(columns() - 3).join(symbols.line)) + '\n')
       }
 
       results.fail.forEach(function (t) {
@@ -119,6 +119,10 @@ function formatErr (error) {
 
 function relative (path) {
   return path.replace(process.cwd() + require('path').sep, '')
+}
+
+function columns () {
+  return process.stdout.columns || 30
 }
 
 module.exports = tapSpec
