@@ -7,9 +7,10 @@ var yaml = require('js-yaml')
 
 var s = {
   err: chalk.red,
-  mute: chalk.reset,
+  test: chalk.blue,
   ok: chalk.green,
-  heading: chalk.underline,
+  heading: chalk.reset,
+  mute: chalk.gray,
   raw: chalk.gray,
   trace: chalk.gray
 }
@@ -36,11 +37,11 @@ function tapSpec (options) {
 
   if (!options.min) {
     tap.on('fail', function (t) {
-      out.push('  ' + s.err(symbols.cross) + ' ' + t.name + '\n')
+      out.push('  ' + s.err(symbols.cross) + ' ' + s.err(t.name) + '\n')
     })
 
     tap.on('pass', function (t) {
-      out.push('  ' + s.ok(symbols.tick) + ' ' + s.mute(t.name) + '\n')
+      out.push('  ' + s.ok(symbols.tick) + ' ' + s.test(t.name) + '\n')
     })
   }
 
@@ -57,20 +58,24 @@ function tapSpec (options) {
 
     if (results.fail.length > 0) {
       if (!options.min) {
-        out.push('  ' + symbols.line + symbols.line + '\n')
+        out.push('  ' + s.err(Array(process.stdout.columns - 3).join(symbols.line)) + '\n')
       }
 
       results.fail.forEach(function (t) {
+        try {
         out.push('\n  ' + s.err(symbols.cross) + ' ' + s.err(t.name) + '\n')
         out.push(formatErr(t.error))
+        } catch (e) {
+          console.log(e)
+        }
       })
 
       out.push('\n')
 
       out.push('  ' +
         s.err(symbols.warning) + ' ' +
-        s.err(results.fail.length + ' failed') + ' ' +
-        results.pass.length + ' passed' +
+        s.err(results.fail.length + ' failed') + '\n  ' +
+        s.mute('  ' + results.pass.length + ' passed') +
         '\n')
     } else {
       out.push('  ' + s.ok(results.pass.length + ' passed') + '\n')
@@ -81,6 +86,9 @@ function tapSpec (options) {
 }
 
 function formatErr (error) {
+  // 'test exited without ending'
+  if (!error.at || !error.at.file) { return '' }
+
   var err = yaml.safeLoad(error.raw)
 
   var out = ''
