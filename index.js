@@ -44,7 +44,7 @@ function tapSpec (options) {
   if (!options.min) {
     tap.on('fail', function (t) {
       out.push('  ' + s.err(symbols.cross) + ' ' + s.test(t.name) +
-        ' ' + s.err(symbols.arrowRight + ' ' + t.error.operator) + '\n')
+        ' ' + s.err(symbols.arrowRight + ' not ' + t.error.operator) + '\n')
     })
 
     tap.on('pass', function (t) {
