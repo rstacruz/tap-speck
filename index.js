@@ -58,7 +58,7 @@ function tapSpec (options) {
 
     if (results.fail.length > 0) {
       if (!options.min) {
-        out.push('  ' + s.err(Array(columns() - 3).join(symbols.line)) + '\n')
+        out.push('  ' + s.err(line()) + '\n')
       }
 
       results.fail.forEach(function (t) {
@@ -68,13 +68,9 @@ function tapSpec (options) {
 
       out.push('\n')
 
-      if (!options.min) {
-        out.push('  ' + s.err(Array(process.stdout.columns - 3).join(symbols.line)) + '\n')
-      }
-
       out.push('  ' +
         s.err(symbols.cross) + ' ' +
-        s.err(results.fail.length + ' failed') + ' ' +
+        s.err(results.fail.length + ' failed') + '\n    ' +
         s.mute(results.pass.length + ' passed') +
         '\n')
     } else {
@@ -121,8 +117,11 @@ function relative (path) {
   return path.replace(process.cwd() + require('path').sep, '')
 }
 
-function columns () {
-  return process.stdout.columns || 30
+function line () {
+  if (process.stdout.columns) {
+    return Array(process.stdout.columns - 3).join(symbols.line)
+  }
+  return Array(3).join(symbols.line)
 }
 
 module.exports = tapSpec
