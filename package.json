@@ -1,27 +1,38 @@
 {
   "name": "@rstacruz/tap-speck",
+  "description": "Readable tap output",
   "version": "0.3.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "tap-speck": "bin/tap-speck"
   },
-  "author": "",
-  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rstacruz/tap-speck/issues"
+  },
   "dependencies": {
-    "through2": "2.0.1",
     "chalk": "1.1.1",
     "duplexer": "0.1.1",
     "figures": "1.4.0",
     "js-yaml": "3.5.2",
     "meow": "3.7.0",
-    "tap-out": "1.4.1"
+    "tap-out": "1.4.1",
+    "through2": "2.0.1"
   },
-  "bin": {
-    "tap-speck": "bin/tap-speck"
+  "devDependencies": {},
+  "directories": {
+    "doc": "docs"
   },
   "files": [
     "index.js",
     "bin"
-  ]
+  ],
+  "homepage": "https://github.com/rstacruz/tap-speck#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rstacruz/tap-speck.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
