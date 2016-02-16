@@ -8,10 +8,8 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "through2": "2.0.1"
-  },
   "dependencies": {
+    "through2": "2.0.1",
     "chalk": "1.1.1",
     "duplexer": "0.1.1",
     "figures": "1.4.0",
